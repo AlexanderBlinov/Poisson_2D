@@ -8,37 +8,37 @@ using namespace std;
 
 // Neodnorodnost'
 double F(double x, double y, double z) {
-    return 0;
+    return 3 * exp(x + y + z);
 }
 
 // Granichnoe uslovie pri x=0
 double A0(double y, double z) {
-    return 20 + y + z;
+    return exp(y + z);
 }
 
 // Granichnoe uslovie pri x=X
 double A1(double y, double z, double X) {
-    return y + z + X;
+    return exp(X + y + z);
 }
 
 // Granichnoe uslovie pri y=0
 double B0(double x, double z) {
-    return 20 + x + z;
+    return exp(x + z);
 }
 
 // Granichnoe uslovie pri y=Y
 double B1(double x, double z, double Y) {
-    return x + z + Y;
+    return exp(x + Y + z);
 }
 
 // Granichnoe uslovie pri z=0
 double C0(double x, double y) {
-    return 20 + x + y;
+    return exp(x + y);
 }
 
 // Granichnoe uslovie pri z=Z
 double C1(double x, double y, double Z) {
-    return x + y + Z;
+    return exp(x + y + Z);
 }
 
 
@@ -85,12 +85,12 @@ int main(int argc, char* argv[]) {
     }
 
     // Vichislenie osnovnih parametrov oblasti reshenija
-    int rit = 200, tag = 1000;
-    double h1 = 0.1, h2 = 0.1, h3 = 0.1;
-    double X = 40, Y = 40, Z = 40;
+    int rit = 100, tag = 1000;
+    double h1 = 0.01, h2 = 0.01, h3 = 0.01;
+    double X = 1, Y = 1, Z = 1;
     double w = 1;
 
-    int Nx = (int)((X - 20) / h1) - 1, Ny = (int)((Y - 20) / h2) - 1, Nz = (int)((Z - 20) / h3) - 1;
+    int Nx = (int)(X / h1) - 1, Ny = (int)(Y / h2) - 1, Nz = (int)(Z / h3) - 1;
 
     int r1 = 20, r4 = 20;
     int Q1 = (int)ceil((double)rit / r1);
@@ -221,7 +221,7 @@ int main(int argc, char* argv[]) {
                             int i = igl2 * r2 + i2 - i1, j = igl3 * r3 + i3 - i1, k = i4 - i1;
 
                             if (i == 0) {
-                                uim = A0(20 + (j + 1) * h2, 20 + (k + 1) * h3);
+                                uim = A0((j + 1) * h2, (k + 1) * h3);
                             } else if (i2 == 0) {
 //                                int q = (i1 * r3 + i3) * r4 * Q4 + i4;
 //                                if (q >= (r1 * Q1 + 1) * r3 * r4 * Q4) {
@@ -237,7 +237,7 @@ int main(int argc, char* argv[]) {
                             }
 
                             if (i == Nx - 1) {
-                                uip = A1(20 + (j + 1) * h2, 20 + (k + 1) * h3, X);
+                                uip = A1((j + 1) * h2, (k + 1) * h3, X);
                             } else if (i3 == 0) {
 //                                int q = ((i1 - 1) * r2 + i2) * r4 * Q4 + i4 - 1;
 //                                if (q >= (r1 * Q1 + 1) * r2 * r4 * Q4) {
@@ -254,7 +254,7 @@ int main(int argc, char* argv[]) {
 
 
                             if (j == 0) {
-                                ujm = B0(20 + (i + 1) * h1, 20 + (k + 1) * h3);
+                                ujm = B0((i + 1) * h1, (k + 1) * h3);
                             } else if (i3 == 0) {
 //                                int q = (i1 * r2 + i2) * r4 * Q4 + i4;
 //                                if (q >= (r1 * Q1 + 1) * r2 * r4 * Q4) {
@@ -270,7 +270,7 @@ int main(int argc, char* argv[]) {
                             }
 
                             if (j == Ny - 1) {
-                                ujp = B1(20 + (i + 1) * h1, 20 + (k + 1) * h3, Y);
+                                ujp = B1((i + 1) * h1, (k + 1) * h3, Y);
                             } else if (i2 == 0) {
 //                                int q = ((i1 - 1) * r3 + i3) * r4 * Q4 + i4 - 1;
 //                                if (q >= (r1 * Q1 + 1) * r3 * r4 * Q4) {
@@ -286,7 +286,7 @@ int main(int argc, char* argv[]) {
                             }
 
                             if (k == 0) {
-                                ukm = C0(20 + (i + 1) * h1, 20 + (j + 1) * h2);
+                                ukm = C0((i + 1) * h1, (j + 1) * h2);
                             } else {
 //                                int q = ((i1 * r2 + i2) * r3 + i3) * r4 * Q4 + i4 - 1;
 //                                if (q >= (r1 * Q1 + 1) * r2 * r3 * r4 * Q4) {
@@ -296,7 +296,7 @@ int main(int argc, char* argv[]) {
                             }
 
                             if (k == Nz - 1) {
-                                ukp = C1(20 + (i + 1) * h1, 20 + (j + 1) * h2, Z);
+                                ukp = C1((i + 1) * h1, (j + 1) * h2, Z);
                             } else if (i2 == 0) {
                                 if (i3 == 0) {
 //                                    int q = (i1 - 1) * r4 * Q4 + i4;
@@ -360,9 +360,9 @@ int main(int argc, char* argv[]) {
                             U[((i1 * r2 + i2) * r3 + i3) * r4 * Q4 + i4] =
                                     w * ((uip + uim) / (h1 * h1)
                                          + (ujp + ujm) / (h2 * h2)
-                                         + (ukp + ukm) / (h3 * h3) - F(20 + (i + 1) * h1,
-                                                                       20 + (j + 1) * h2,
-                                                                       20 + (k + 1) * h3)) /
+                                         + (ukp + ukm) / (h3 * h3) - F((i + 1) * h1,
+                                                                       (j + 1) * h2,
+                                                                       (k + 1) * h3)) /
                                     (2 / (h1 * h1) + 2 / (h2 * h2) + 2 / (h3 * h3)) + (1 - w) * u;
 //                            if (rank == 11 && i1 == rit) {
 //                                printf("%f\n", U[((i1 * r2 + i2) * r3 + i3) * r4 * Q4 + i4]);

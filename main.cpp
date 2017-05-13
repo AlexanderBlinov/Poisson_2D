@@ -371,21 +371,15 @@ int main(int argc, char* argv[]) {
 //            printf("%d (%d, %d) leaves tile\n", rank, igl1, igl4);
 
             if (downRight != -1) {
-                if (request_downRight != MPI_REQUEST_NULL) {
-                    MPI_Wait(&request_downRight, &status);
-                }
+                MPI_Wait(&request_downRight, &status);
             }
 
             if (down != -1) {
-                if (request_down != MPI_REQUEST_NULL) {
-                    MPI_Wait(&request_down, &status);
-                }
+                MPI_Wait(&request_down, &status);
             }
 
             if (right != -1) {
-                if (request_right != MPI_REQUEST_NULL) {
-                    MPI_Wait(&request_right, &status);
-                }
+                MPI_Wait(&request_right, &status);
             }
 
             for (int l = 0; l < r1; ++l) {

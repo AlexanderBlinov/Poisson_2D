@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Vichislenie osnovnih parametrov oblasti reshenija
-    int rit = 200, tag = 1000;
+    int rit = 300, tag = 1000;
     double h1 = 0.01, h2 = 0.01, h3 = 0.01;
     double X = 1, Y = 1, Z = 1;
     double w = 1.7;
@@ -349,12 +349,9 @@ int main(int argc, char* argv[]) {
             for (int m = 0; m < dim[1]; ++m) {
                 if (n == self[0] && m == self[1]) {
                     for (int i = 0; i < r2; ++i) {
-                        for (int j = 0; j < r3; ++j) {
-                            for (int k = 0; k < r4 * Q4; ++k) {
-                                R[(((r2 * n + i) * Q3 + r3) * m + j) * r4 * Q4 + k]
-                                        = U[((l * r2 + i) * r3 + j) * r4 * Q4 + k];
-                            }
-                        }
+                        memcpy(R + ((n * r2 + i) * Q3 + m) * r3 * r4 * Q4,
+                               U + (l * r2 + i) * r3 * r4 * Q4,
+                               r3 * r4 * Q4 * sizeof(double));
                     }
                     continue;
                 }

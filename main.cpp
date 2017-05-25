@@ -97,8 +97,8 @@ int main(int argc, char* argv[]) {
     }
 
     // Vichislenie osnovnih parametrov oblasti reshenija
-    int rit = 300, tag = 1000;
-    double h1 = 0.01, h2 = 0.01, h3 = 0.01;
+    int rit = 300, tag = 31;
+    double h1 = 0.005, h2 = 0.005, h3 = 0.005;
     double X = 1, Y = 1, Z = 1;
     double w = 1.7;
 
